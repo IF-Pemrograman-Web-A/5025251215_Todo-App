@@ -18,5 +18,5 @@ Pada halaman Todo List ini terdapat beberapa bagian, yaitu:
 
 
 ## Preview
-
+## Dekstop
 <img width="1448" height="735" alt="Screenshot 2026-09-14 at 17 35 17" src="https://github.com/user-attachments/assets/f48f4ba7-1d6a-44b3-ad7b-1fb2850c29af" />
