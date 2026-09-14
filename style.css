@@ -1,0 +1,219 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #e9edf2;
+    color: #333;
+}
+
+
+header {
+    background-color: #26364a;
+    color: white;
+    padding: 35px 10%;
+}
+
+
+header h1 {
+    margin: 5px 0;
+    font-size: 30px;
+}
+
+
+header p {
+    margin: 5px 0;
+}
+
+
+.small-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+
+main {
+    width: 80%;
+    margin: 30px auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+}
+
+
+aside {
+    width: 42%;
+}
+
+
+.detail {
+    width: 58%;
+    background-color: white;
+    padding: 25px;
+    border: 1px solid #d1d6dc;
+}
+
+
+h2 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #26364a;
+}
+
+
+.task {
+    background-color: white;
+    border: 1px solid #d1d6dc;
+    padding: 13px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.task p {
+    margin: 5px 0 0;
+    font-size: 13px;
+    color: #777;
+}
+
+
+.pending,
+.done {
+    font-size: 11px;
+    padding: 5px 8px;
+    white-space: nowrap;
+}
+
+
+.pending {
+    background-color: #f5df9b;
+}
+
+
+.done {
+    background-color: #b9ddc4;
+}
+
+
+.add-box {
+    background-color: #dce3ea;
+    padding: 18px;
+    margin-top: 20px;
+}
+
+
+.add-box h2 {
+    font-size: 17px;
+}
+
+
+label {
+    display: block;
+    margin: 13px 0 5px;
+    font-size: 13px;
+}
+
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #bfc5cb;
+    background-color: white;
+    font-family: Arial, sans-serif;
+}
+
+
+textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+
+select {
+    cursor: pointer;
+}
+
+
+button {
+    margin-top: 15px;
+    padding: 9px 15px;
+    border: 0;
+    background-color: #344e68;
+    color: white;
+    cursor: pointer;
+}
+
+
+.delete {
+    background-color: #b95050;
+    margin-left: 8px;
+}
+
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+
+.detail-status {
+    background-color: #f5df9b;
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+
+.buttons {
+    margin-top: 5px;
+}
+
+
+footer {
+    margin-top: 40px;
+    background-color: #26364a;
+    color: white;
+    text-align: center;
+    padding: 18px;
+    font-size: 13px;
+}
+
+
+@media screen and (max-width: 700px) {
+
+    header {
+        padding: 25px;
+    }
+
+
+    main {
+        width: 90%;
+        display: block;
+    }
+
+
+    aside,
+    .detail {
+        width: 100%;
+    }
+
+
+    .detail {
+        margin-top: 20px;
+    }
+
+
+    .task {
+        align-items: flex-start;
+    }
+
+}
