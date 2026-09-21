@@ -35,6 +35,7 @@ Pada halaman Todo List ini terdapat beberapa bagian dan fitur, yaitu:
 
 <img width="585" height="1266" alt="IMG_5013" src="https://github.com/user-attachments/assets/8ac2bbf0-4d61-4628-b293-519fde75401a" />
 
+## After js
 <img width="1169" height="737" alt="Screenshot 2026-09-21 at 17 38 03" src="https://github.com/user-attachments/assets/9f4b2c1a-9d7d-433b-8ce9-61f287e27b3b" />
 
 <img width="807" height="640" alt="Screenshot 2026-09-21 at 17 38 20" src="https://github.com/user-attachments/assets/e77fba6e-9b00-4704-bd65-8728b0c8c9b4" />
