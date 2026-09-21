@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Todo List</title>
     <link rel="stylesheet" href="style.css">
@@ -9,74 +8,35 @@
 <body>
 
 <header>
-
     <p class="small-title">ARAH HIDUP</p>
     <h1>My Todo List</h1>
     <p>Daftar kegitanmu biar gak malas.</p>
 
+    <button id="modeButton" type="button">Dark Mode</button>
 </header>
-
 
 <main>
 
     <aside>
-
         <h2>Tasks</h2>
 
-        <div class="task">
-            <div>
-                <b>Jogging</b>
-                <p>Pace 8 ga masalah yang penting keringetan</p>
-            </div>
-            <span class="pending">Pending</span>
-        </div>
-
-
-        <div class="task">
-            <div>
-                <b>Bersihin Kos</b>
-                <p>Sapu sapu, Ngepel, Sikat wc </p>
-            </div>
-            <span class="done">Completed</span>
-        </div>
-
-
-        <div class="task">
-            <div>
-                <b>Kelas Matdis</b>
-                <p>Baangun jam 8 biar ga telat</p>
-            </div>
-            <span class="done">Completed</span>
-        </div>
-
-
-        <div class="task">
-            <div>
-                <b>Tugas bikin web Todo list</b>
-                <p>Deadline 14 september jam 8 malam</p>
-            </div>
-            <span class="pending">Pending</span>
-        </div>
-
+        <div id="taskList"></div>
 
         <div class="add-box">
-
             <h2>New Task</h2>
 
-            <form>
+            <form id="addForm">
 
                 <label>Task Name</label>
-                <input type="text" placeholder="Nama tugas">
+                <input id="taskName" type="text" placeholder="Nama tugas">
 
                 <label>Short Description</label>
-                <input type="text" placeholder="Deskripsi tugas">
+                <input id="taskDescription" type="text" placeholder="Deskripsi tugas">
 
                 <button type="submit">Add Task</button>
 
             </form>
-
         </div>
-
     </aside>
 
 
@@ -84,35 +44,28 @@
 
         <div class="detail-header">
             <h2>Task Details</h2>
-            <span class="detail-status">Pending</span>
+            <span id="detailStatus" class="detail-status">Pending</span>
         </div>
 
-
-        <form>
+        <form id="detailForm">
 
             <label>Task Name</label>
-            <input type="text" value="Jogging">
-
+            <input id="detailName" type="text">
 
             <label>Description</label>
-            <textarea>Pace 8 ga masalah yang penting keringetan</textarea>
-
+            <textarea id="detailDescription"></textarea>
 
             <label>Task Status</label>
-            <select>
-                <option>Completed</option>
-                <option>Pending</option>
+            <select id="detailStatusSelect">
+                <option value="Completed">Completed</option>
+                <option value="Pending">Pending</option>
             </select>
 
-
             <div class="buttons">
-
                 <button type="submit">Save Changes</button>
-
-                <button type="button" class="delete">
+                <button type="button" id="deleteButton" class="delete">
                     Delete Task
                 </button>
-
             </div>
 
         </form>
@@ -121,10 +74,11 @@
 
 </main>
 
-
 <footer>
     <p>Todo List</p>
 </footer>
+
+<script src="script.js"></script>
 
 </body>
 </html>
