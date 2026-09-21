@@ -188,6 +188,91 @@ footer {
 }
 
 
+/* JavaScript */
+
+#modeButton {
+    background-color: white;
+    color: #26364a;
+}
+
+
+.task {
+    cursor: pointer;
+}
+
+
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.task-actions button {
+    margin: 0;
+    padding: 5px 8px;
+    font-size: 11px;
+}
+
+
+.check-task {
+    width: auto;
+}
+
+
+body.dark {
+    background-color: #1f252c;
+    color: #eee;
+}
+
+
+body.dark .detail,
+body.dark .task {
+    background-color: #2b333d;
+    border-color: #46515d;
+}
+
+
+body.dark h2 {
+    color: white;
+}
+
+
+body.dark .task p {
+    color: #bbb;
+}
+
+
+body.dark .add-box {
+    background-color: #343e49;
+}
+
+
+body.dark input,
+body.dark textarea,
+body.dark select {
+    background-color: #242b33;
+    color: white;
+    border-color: #56616d;
+}
+
+
+body.dark .detail {
+    color: white;
+}
+
+
+body.dark .detail-header {
+    border-color: #555;
+}
+
+
+body.dark header,
+body.dark footer {
+    background-color: #151b21;
+}
+
+
 @media screen and (max-width: 700px) {
 
     header {
