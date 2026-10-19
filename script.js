@@ -1,301 +1,250 @@
-let todos = [
-    {
-        name: "Jogging",
-        description: "Pace 8 ga masalah yang penting keringetan",
-        status: "Pending"
-    },
-    {
-        name: "Bersihin Kos",
-        description: "Sapu sapu, Ngepel, Sikat wc",
-        status: "Completed"
-    },
-    {
-        name: "Kelas Matdis",
-        description: "Baangun jam 8 biar ga telat",
-        status: "Completed"
-    },
-    {
-        name: "Tugas bikin web Todo list",
-        description: "Deadline 14 september jam 8 malam",
-        status: "Pending"
+const DB_NAME = "TodoAppDB";
+const DB_VERSION = 1;
+const STORE_NAME = "todos";
+const MODE_KEY = "todo-theme";
+let db;
+let selectedTaskId = null;
+
+const request = indexedDB.open(DB_NAME, DB_VERSION);
+request.onerror = (event) => console.error("Database error: " + event.target.errorCode);
+request.onsuccess = (event) => {
+    db = event.target.result;
+    showTasks();
+};
+request.onupgradeneeded = (event) => {
+    const db = event.target.result;
+    if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
     }
-];
-
-
-let selectedTask = 0;
-
+};
 
 const taskList = document.getElementById("taskList");
-
 const addForm = document.getElementById("addForm");
-const taskName = document.getElementById("taskName");
-const taskDescription = document.getElementById("taskDescription");
-
 const detailForm = document.getElementById("detailForm");
-const detailName = document.getElementById("detailName");
-const detailDescription = document.getElementById("detailDescription");
-const detailStatusSelect = document.getElementById("detailStatusSelect");
-const detailStatus = document.getElementById("detailStatus");
-
 const deleteButton = document.getElementById("deleteButton");
 const modeButton = document.getElementById("modeButton");
+const imagePreviewContainer = document.getElementById("imagePreviewContainer");
+const detailImage = document.getElementById("detailImage");
 
-
-function showTasks() {
-
-    taskList.innerHTML = "";
-
-    todos.forEach(function(todo, index) {
-
-        const task = document.createElement("div");
-
-        task.className = "task";
-
-
-        const statusClass = todo.status === "Completed"
-            ? "done"
-            : "pending";
-
-
-        task.innerHTML = `
-            <div>
-                <input 
-                    type="checkbox" 
-                    class="check-task"
-                    ${todo.status === "Completed" ? "checked" : ""}
-                >
-
-                <b>${todo.name}</b>
-
-                <p>${todo.description}</p>
-            </div>
-
-            <div class="task-actions">
-
-                <span class="${statusClass}">
-                    ${todo.status}
-                </span>
-
-                <button type="button" class="edit-button">
-                    Edit
-                </button>
-
-                <button type="button" class="delete-task">
-                    Delete
-                </button>
-
-            </div>
-        `;
-
-
-        taskList.appendChild(task);
-
-
-        const checkbox = task.querySelector(".check-task");
-
-
-        checkbox.addEventListener("change", function() {
-
-            if (checkbox.checked) {
-                todos[index].status = "Completed";
-            } else {
-                todos[index].status = "Pending";
-            }
-
-            showTasks();
-            showDetail(index);
-
-        });
-
-
-        const editButton = task.querySelector(".edit-button");
-
-
-        editButton.addEventListener("click", function() {
-
-            showDetail(index);
-
-        });
-
-
-        const deleteTask = task.querySelector(".delete-task");
-
-
-        deleteTask.addEventListener("click", function() {
-
-            todos.splice(index, 1);
-
-
-            if (selectedTask >= todos.length) {
-                selectedTask = todos.length - 1;
-            }
-
-
-            showTasks();
-
-
-            if (todos.length > 0) {
-
-                showDetail(selectedTask);
-
-            } else {
-
-                detailName.value = "";
-                detailDescription.value = "";
-                detailStatusSelect.value = "Pending";
-                detailStatus.textContent = "Pending";
-
-            }
-
-        });
-
+function getAllTodos() {
+    return new Promise((resolve) => {
+        const transaction = db.transaction(STORE_NAME, "readonly");
+        const store = transaction.objectStore(STORE_NAME);
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result);
     });
 }
 
-
-function showDetail(index) {
-
-    if (todos.length === 0) {
-        return;
-    }
-
-
-    selectedTask = index;
-
-
-    const todo = todos[index];
-
-
-    detailName.value = todo.name;
-    detailDescription.value = todo.description;
-    detailStatusSelect.value = todo.status;
-    detailStatus.textContent = todo.status;
-
-
-    if (todo.status === "Completed") {
-
-        detailStatus.style.backgroundColor = "#b9ddc4";
-
-    } else {
-
-        detailStatus.style.backgroundColor = "#f5df9b";
-
-    }
-
+function saveTodo(todo) {
+    return new Promise((resolve) => {
+        const transaction = db.transaction(STORE_NAME, "readwrite");
+        const store = transaction.objectStore(STORE_NAME);
+        const req = store.put(todo);
+        req.onsuccess = () => resolve();
+    });
 }
 
+function deleteTodoDB(id) {
+    return new Promise((resolve) => {
+        const transaction = db.transaction(STORE_NAME, "readwrite");
+        const store = transaction.objectStore(STORE_NAME);
+        const req = store.delete(id);
+        req.onsuccess = () => resolve();
+    });
+}
 
-addForm.addEventListener("submit", function(event) {
-
-    event.preventDefault();
-
-
-    const name = taskName.value.trim();
-    const description = taskDescription.value.trim();
-
-
-    if (name === "" || description === "") {
-
-        alert("Nama dan deskripsi tugas harus diisi.");
-
-        return;
-    }
-
-
-    const newTodo = {
-        name: name,
-        description: description,
-        status: "Pending"
-    };
-
-
-    todos.push(newTodo);
-
-
-    taskName.value = "";
-    taskDescription.value = "";
-
-
-    showTasks();
-
-
-    showDetail(todos.length - 1);
-
-});
-
-
-detailForm.addEventListener("submit", function(event) {
-
-    event.preventDefault();
-
+async function showTasks() {
+    taskList.innerHTML = "";
+    const todos = await getAllTodos();
 
     if (todos.length === 0) {
+        taskList.innerHTML = "<p>Belum ada tugas.</p>";
+        clearDetail();
         return;
     }
 
+    todos.forEach(function (todo) {
+        const task = document.createElement("div");
+        task.className = "task";
+        task.setAttribute("role", "listitem");
 
-    todos[selectedTask].name = detailName.value;
-    todos[selectedTask].description = detailDescription.value;
-    todos[selectedTask].status = detailStatusSelect.value;
+        const statusClass = todo.status === "Completed" ? "done" : "pending";
+        let imgHtml = todo.image ? `<img src="${todo.image}" alt="Gambar ${todo.name}">` : "";
 
+        task.innerHTML = `
+            <div class="task-content">
+                ${imgHtml}
+                <div>
+                    <input type="checkbox" class="check-task" ${todo.status === "Completed" ? "checked" : ""} aria-label="Tandai selesai">
+                    <b>${todo.name}</b>
+                    <p>${todo.description}</p>
+                </div>
+            </div>
+            <div class="task-actions">
+                <span class="${statusClass}">${todo.status}</span>
+                <button type="button" class="edit-button" aria-label="Edit tugas ${todo.name}">Edit</button>
+                <button type="button" class="delete-task" aria-label="Hapus tugas ${todo.name}">Delete</button>
+            </div>
+        `;
 
-    showTasks();
-    showDetail(selectedTask);
+        taskList.appendChild(task);
 
+        task.querySelector(".check-task").addEventListener("change", async (e) => {
+            todo.status = e.target.checked ? "Completed" : "Pending";
+            await saveTodo(todo);
+            showTasks();
+            if(selectedTaskId === todo.id) showDetail(todo.id);
+        });
+
+        task.querySelector(".edit-button").addEventListener("click", () => {
+            showDetail(todo.id);
+        });
+
+        task.querySelector(".delete-task").addEventListener("click", async () => {
+            await deleteTodoDB(todo.id);
+            if (selectedTaskId === todo.id) clearDetail();
+            showTasks();
+        });
+    });
+}
+
+async function showDetail(id) {
+    if (!id) return;
+    const todos = await getAllTodos();
+    const todo = todos.find(t => t.id === id);
+    if (!todo) return;
+
+    selectedTaskId = id;
+    document.getElementById("detailName").value = todo.name;
+    document.getElementById("detailDescription").value = todo.description;
+    document.getElementById("detailStatusSelect").value = todo.status;
+    document.getElementById("detailStatus").textContent = todo.status;
+    document.getElementById("detailStatus").style.backgroundColor = todo.status === "Completed" ? "#b9ddc4" : "#f5df9b";
+
+    if (todo.image) {
+        detailImage.src = todo.image;
+        imagePreviewContainer.style.display = "block";
+    } else {
+        imagePreviewContainer.style.display = "none";
+    }
+}
+
+function clearDetail() {
+    selectedTaskId = null;
+    detailForm.reset();
+    document.getElementById("detailStatus").textContent = "Pending";
+    document.getElementById("detailStatus").style.backgroundColor = "#f5df9b";
+    imagePreviewContainer.style.display = "none";
+}
+
+addForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    
+    const name = document.getElementById("taskName").value.trim();
+    const description = document.getElementById("taskDescription").value.trim();
+    const notifyTime = document.getElementById("taskNotifyTime").value;
+    const imageFile = document.getElementById("taskImage").files[0];
+
+    function createTodo(imageBase64) {
+        const newTodo = { name, description, status: "Pending", image: imageBase64, notifyTime };
+        saveTodo(newTodo).then(() => {
+            addForm.reset();
+            showTasks();
+            if (notifyTime) {
+                requestNotificationPermission(notifyTime, name);
+            }
+        });
+    }
+
+    if (imageFile) {
+        const reader = new FileReader();
+        reader.onload = (event) => createTodo(event.target.result);
+        reader.readAsDataURL(imageFile);
+    } else {
+        createTodo(null);
+    }
 });
 
+detailForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    if (!selectedTaskId) return;
 
-deleteButton.addEventListener("click", function() {
+    const todos = await getAllTodos();
+    const todo = todos.find(t => t.id === selectedTaskId);
+    
+    todo.name = document.getElementById("detailName").value;
+    todo.description = document.getElementById("detailDescription").value;
+    todo.status = document.getElementById("detailStatusSelect").value;
 
-    if (todos.length === 0) {
+    await saveTodo(todo);
+    showTasks();
+    showDetail(selectedTaskId);
+});
+
+deleteButton.addEventListener("click", async function() {
+    if (!selectedTaskId) return;
+    if(confirm("Yakin mau hapus tugas ini?")) {
+        await deleteTodoDB(selectedTaskId);
+        clearDetail();
+        showTasks();
+    }
+});
+
+function applyMode(mode) {
+    if (mode === "dark") {
+        document.body.classList.add("dark");
+        modeButton.textContent = "🌙 Dark Mode";
+        modeButton.setAttribute("aria-label", "Ganti ke Light Mode");
+    } else {
+        document.body.classList.remove("dark");
+        modeButton.textContent = "🌞 Light Mode";
+        modeButton.setAttribute("aria-label", "Ganti ke Dark Mode");
+    }
+    localStorage.setItem(MODE_KEY, mode);
+}
+
+const savedMode = localStorage.getItem(MODE_KEY) || "light";
+applyMode(savedMode);
+
+modeButton.addEventListener("click", function () {
+    const current = document.body.classList.contains("dark") ? "dark" : "light";
+    applyMode(current === "dark" ? "light" : "dark");
+});
+
+async function requestNotificationPermission(notifyTime, taskName) {
+    if (!("Notification" in window)) {
+        alert("Browser ini tidak mendukung notifikasi desktop.");
         return;
     }
 
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+        const now = new Date().getTime();
+        const target = new Date(notifyTime).getTime();
+        const delay = target - now;
 
-    todos.splice(selectedTask, 1);
-
-
-    if (selectedTask >= todos.length) {
-        selectedTask = todos.length - 1;
-    }
-
-
-    showTasks();
-
-
-    if (todos.length > 0) {
-
-        showDetail(selectedTask);
-
+        if (delay > 0) {
+            if (navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({
+                    type: 'SCHEDULE_NOTIFICATION',
+                    delay: delay,
+                    title: 'Pengingat Tugas!',
+                    body: `Jangan lupa kerjakan: ${taskName}`
+                });
+            }
+            alert(`Notifikasi dijadwalkan dalam ${Math.round(delay/60000)} menit.`);
+        } else {
+            alert("Waktu notifikasi sudah lewat atau tidak valid.");
+        }
     } else {
-
-        detailName.value = "";
-        detailDescription.value = "";
-        detailStatusSelect.value = "Pending";
-        detailStatus.textContent = "Pending";
-
+        alert("Izin notifikasi ditolak. Tugas tetap disimpan tanpa notifikasi.");
     }
+}
 
-});
-
-
-modeButton.addEventListener("click", function() {
-
-    document.body.classList.toggle("dark");
-
-
-    if (document.body.classList.contains("dark")) {
-
-        modeButton.textContent = "Light Mode";
-
-    } else {
-
-        modeButton.textContent = "Dark Mode";
-
-    }
-
-});
-
-
-showTasks();
-showDetail(0);
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+            .then(reg => console.log("Service Worker Registered", reg))
+            .catch(err => console.error("Service Worker Failed", err));
+    });
+}
