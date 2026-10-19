@@ -9,42 +9,41 @@ NRP: 50252512125
 Kelas: A
 
 ## Deskripsi
-Pada halaman Todo List ini terdapat beberapa bagian dan fitur, yaitu:
+# Todo App - E03 The Lost Cavern
 
-- Header yang berisi judul "My Todo List" dan keterangan singkat.
-- Bagian Tasks yang menampilkan daftar tugas beserta statusnya.
-- Setiap tugas memiliki nama, deskripsi singkat, dan status seperti Pending atau Completed.
-- Bagian New Task yang digunakan untuk menambahkan tugas baru.
-- Tugas baru dapat langsung ditampilkan ke dalam daftar tanpa perlu melakukan refresh halaman.
-- Setiap tugas memiliki checkbox untuk mengubah status tugas menjadi Completed atau Pending.
-- Terdapat tombol Edit untuk mengubah nama, deskripsi, dan status tugas.
-- Terdapat tombol Delete untuk menghapus tugas dari daftar.
-- Bagian Task Details yang menampilkan detail dari tugas yang dipilih.
-- Terdapat tombol Save Changes untuk menyimpan perubahan pada tugas.
-- Terdapat tombol Delete Task untuk menghapus tugas melalui bagian detail.
-- Data tugas disimpan dalam bentuk object menggunakan JavaScript.
-- Terdapat tombol Dark Mode untuk mengubah tampilan halaman menjadi mode gelap dan Light Mode untuk kembali ke tampilan awal.
-- Data akan kembali ke data awal ketika halaman di-refresh.
+## Fitur yang Diimplementasikan:
+1. **Web Storage (IndexedDB):** Data Todo List disimpan secara persisten menggunakan IndexedDB (`TodoAppDB`), termasuk menyimpan gambar dalam format Base64.
+2. **Web Storage (LocalStorage):** Menyimpan preferensi tema (Light/Dark Mode) menggunakan key `todo-theme`.
+3. **Media Capture API:** Menambahkan fitur untuk mengambil gambar menggunakan kamera perangkat langsung dari form input (`capture="environment"`).
+4. **Service Worker & Notification:** Mengimplementasikan `sw.js` untuk berjalan di background thread. Digunakan untuk menjadwalkan notifikasi pengingat tugas sesuai dengan waktu yang diinputkan pengguna.
+5. **Accessibility (Aksesibilitas):** Menerapkan atribut `aria-label`, `role`, dan sinkronisasi `<label for>` dengan `<input id>` agar ramah pengguna *screen reader*.
 
+---
 
-## Preview
-## Dekstop
-<img width="1448" height="735" alt="Screenshot 2026-09-14 at 17 35 17" src="https://github.com/user-attachments/assets/f48f4ba7-1d6a-44b3-ad7b-1fb2850c29af" /> 
+## Bukti Pengerjaan (Screenshot)
 
-<img width="585" height="1266" alt="IMG_5014" src="https://github.com/user-attachments/assets/104635e0-6d3c-454a-9c0c-5140f8ee4fd0" />
+### 1. Penerapan IndexedDB & Gambar
+*(Menunjukkan data Todo List beserta gambar Base64 tersimpan di database browser)*
 
-<img width="585" height="1266" alt="IMG_5013" src="https://github.com/user-attachments/assets/8ac2bbf0-4d61-4628-b293-519fde75401a" />
+<img width="1444" height="542" alt="Screenshot 2026-10-19 at 19 55 28" src="https://github.com/user-attachments/assets/f9bdb660-e4e4-4002-9b8f-ebd0578eea81" />
 
-## After js
-<img width="1169" height="737" alt="Screenshot 2026-09-21 at 17 38 03" src="https://github.com/user-attachments/assets/9f4b2c1a-9d7d-433b-8ce9-61f287e27b3b" />
+*Keterangan: Data tersimpan di `Application > IndexedDB > TodoAppDB > todos`.*
 
-<img width="807" height="640" alt="Screenshot 2026-09-21 at 17 38 20" src="https://github.com/user-attachments/assets/e77fba6e-9b00-4704-bd65-8728b0c8c9b4" />
+### 2. Penerapan LocalStorage (Dark/Light Mode)
+*(Menunjukkan preferensi tema tersimpan di LocalStorage)*
 
-<img width="861" height="583" alt="Screenshot 2026-09-21 at 17 38 31" src="https://github.com/user-attachments/assets/86a0b48d-b1cb-467b-9b27-e6956d185be8" />
+<img width="1468" height="496" alt="Screenshot 2026-10-19 at 20 01 41" src="https://github.com/user-attachments/assets/7d681286-a341-4a1f-a691-566e5fb3bfb2" />
 
-<img width="830" height="403" alt="Screenshot 2026-09-21 at 17 39 17" src="https://github.com/user-attachments/assets/96a18d3d-9f4c-4a38-8c8c-9685b431e647" />
+*Keterangan: Key `todo-theme` dengan value `dark` (atau `light`).*
 
-<img width="902" height="276" alt="Screenshot 2026-09-21 at 17 39 23" src="https://github.com/user-attachments/assets/c48cccfb-e16b-4d49-94bc-a752a6b77258" />
+### 3. Penerapan Media Capture API (Kamera)
+*(Menunjukkan fitur pengambilan gambar dari kamera perangkat)*
 
+<img width="686" height="674" alt="Screenshot 2026-10-19 at 20 03 12" src="https://github.com/user-attachments/assets/8e30c61b-99e8-4802-8c1a-812db26ded08" />
 
+*Keterangan: Preview gambar tugas setelah diambil menggunakan kamera.*
 
+### 4. Penerapan Service Worker & Notifikasi
+*(Menunjukkan Service Worker aktif dan notifikasi berjalan)*
+
+<img width="427" height="128" alt="Screenshot 2026-10-19 at 20 05 05" src="https://github.com/user-attachments/assets/e314785e-32d3-4ab8-bd94-4988edf8b083" />
