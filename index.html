@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Todo List</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Todo List - E03</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -10,75 +12,71 @@
 <header>
     <p class="small-title">ARAH HIDUP</p>
     <h1>My Todo List</h1>
-    <p>Daftar kegitanmu biar gak malas.</p>
-
-    <button id="modeButton" type="button">Dark Mode</button>
+    <p>Daftar kegiatanmu biar gak malas.</p>
+    <button id="modeButton" type="button" aria-label="Ganti Tema Tampilan">🌞 Light Mode</button>
 </header>
 
 <main>
-
     <aside>
         <h2>Tasks</h2>
-
-        <div id="taskList"></div>
+        <div id="taskList" role="list" aria-live="polite"></div>
 
         <div class="add-box">
-            <h2>New Task</h2>
-
+            <h2>Tambah Tugas Baru</h2>
             <form id="addForm">
+                <label for="taskName">Task Name</label>
+                <input id="taskName" type="text" placeholder="Nama tugas" required aria-required="true">
 
-                <label>Task Name</label>
-                <input id="taskName" type="text" placeholder="Nama tugas">
+                <label for="taskDescription">Short Description</label>
+                <input id="taskDescription" type="text" placeholder="Deskripsi tugas" required aria-required="true">
 
-                <label>Short Description</label>
-                <input id="taskDescription" type="text" placeholder="Deskripsi tugas">
+                <label for="taskNotifyTime">Waktu Notifikasi (Opsional)</label>
+                <input id="taskNotifyTime" type="datetime-local">
+
+                <label for="taskImage">Ambil Gambar (Opsional)</label>
+                <input id="taskImage" type="file" accept="image/*" capture="environment">
 
                 <button type="submit">Add Task</button>
-
             </form>
         </div>
     </aside>
 
-
     <section class="detail">
-
         <div class="detail-header">
             <h2>Task Details</h2>
             <span id="detailStatus" class="detail-status">Pending</span>
         </div>
 
         <form id="detailForm">
-
-            <label>Task Name</label>
+            <label for="detailName">Task Name</label>
             <input id="detailName" type="text">
 
-            <label>Description</label>
+            <label for="detailDescription">Description</label>
             <textarea id="detailDescription"></textarea>
 
-            <label>Task Status</label>
+            <label for="detailStatusSelect">Task Status</label>
             <select id="detailStatusSelect">
                 <option value="Completed">Completed</option>
                 <option value="Pending">Pending</option>
             </select>
 
-            <div class="buttons">
-                <button type="submit">Save Changes</button>
-                <button type="button" id="deleteButton" class="delete">
-                    Delete Task
-                </button>
+            <div id="imagePreviewContainer" style="display:none; margin-top: 15px;">
+                <label>Lampiran Gambar:</label>
+                <img id="detailImage" src="" alt="Gambar Tugas" style="max-width: 100%; border-radius: 4px;">
             </div>
 
+            <div class="buttons">
+                <button type="submit">Save Changes</button>
+                <button type="button" id="deleteButton" class="delete">Delete Task</button>
+            </div>
         </form>
-
     </section>
-
 </main>
 
 <footer>
-    <p>Todo List</p>
+    <p>Todo List E03</p>
 </footer>
 
 <script src="script.js"></script>
-
 </body>
 </html>
